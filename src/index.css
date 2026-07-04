@@ -1,34 +1,39 @@
 /* ============================================================
-   Office IoT Monitor — Minimalist Editorial Theme (Sofi-Inspired)
-   Clean, high-contrast, light-mode design with premium typography
+   Office IoT Monitor — Minimalist Theme (Green & Slate Palette)
+   High-contrast, light-mode design using organic sage & forest tones
    ============================================================ */
 
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap');
 
 /* ── Design Tokens ────────────────────────────────────────── */
 :root {
-  --bg-base:        #f9f9fb;
-  --bg-surface:     #ffffff;
-  --bg-button:      #000000;
+  --color-slate:      #273338;
+  --color-forest:     #284a3e;
+  --color-sage:       #5e8369;
+  --color-dusty:      #9caf88;
   
-  --border:         #e2e4e9;
-  --border-hover:   #111111;
+  --bg-base:          #f4f6f5; /* Clean light gray-green background */
+  --bg-surface:       #ffffff;
+  --bg-button:        var(--color-slate);
+  
+  --border:           #e1e5e3;
+  --border-hover:     var(--color-sage);
 
-  --text-primary:   #000000;
-  --text-secondary: #5c6470;
-  --text-muted:     #9ea5b1;
+  --text-primary:     var(--color-slate);
+  --text-secondary:   #4a5450;
+  --text-muted:       #8a9490;
 
-  --accent-amber:   #e69a22;
-  --accent-red:     #d93838;
-  --accent-green:   #287d55;
-  --accent-blue:    #1f57e6;
+  --accent-amber:     #d48a15;
+  --accent-red:       #c23232;
+  --accent-green:     var(--color-forest);
+  --accent-blue:      var(--color-sage);
 
-  --radius-sm:      6px;
-  --radius-md:      12px;
-  --radius-lg:      20px;
-  --radius-pill:    999px;
+  --radius-sm:        6px;
+  --radius-md:        12px;
+  --radius-lg:        20px;
+  --radius-pill:      999px;
 
-  --transition:     all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  --transition:       all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
 /* ── Reset ────────────────────────────────────────────────── */
@@ -162,7 +167,7 @@ body {
   padding-bottom: 0.75rem;
 }
 
-.section-icon { display: none; } /* Editorial look hides emojis in headings */
+.section-icon { display: none; }
 
 .section-title {
   font-size: 1.25rem;
@@ -209,7 +214,7 @@ body {
   font-size: 4.5rem;
   font-weight: 800;
   letter-spacing: -0.06em;
-  color: var(--text-primary);
+  color: var(--color-forest);
   line-height: 1;
 }
 
@@ -276,7 +281,7 @@ body {
 
 .power-room-bar-fill {
   height: 100%;
-  background: var(--text-primary);
+  background: var(--color-sage);
   transition: width 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
 
@@ -306,7 +311,7 @@ body {
   padding-bottom: 0.5rem;
 }
 
-.room-label-dot { display: none; } /* Minimalist hide */
+.room-label-dot { display: none; }
 
 .devices-grid {
   display: grid;
@@ -328,8 +333,9 @@ body {
 }
 
 .device-card.on {
-  border-color: var(--border-hover);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+  border-color: var(--color-sage);
+  background: #f0f4f2; /* Soft light sage background highlight */
+  box-shadow: 0 4px 20px rgba(40, 74, 62, 0.04);
 }
 
 .device-card-top {
@@ -340,16 +346,16 @@ body {
 
 .device-icon-wrap {
   font-size: 1.2rem;
-  color: var(--text-secondary);
+  color: var(--text-muted);
 }
 
 .device-card.on .device-icon-wrap {
-  color: var(--text-primary);
+  color: var(--color-forest);
 }
 
 .device-card.on .fan-icon {
   display: inline-block;
-  animation: fan-spin-lite 2s linear infinite;
+  animation: fan-spin-lite 2.5s linear infinite;
 }
 
 @keyframes fan-spin-lite {
@@ -365,7 +371,7 @@ body {
 }
 
 .device-card.on .device-status-dot {
-  background: var(--text-primary);
+  background: var(--color-forest);
 }
 
 .device-name {
@@ -377,7 +383,7 @@ body {
 }
 
 .device-card.on .device-name {
-  color: var(--text-primary);
+  color: var(--color-slate);
   font-weight: 600;
 }
 
@@ -396,7 +402,7 @@ body {
 }
 
 .device-card.on .device-state {
-  color: var(--text-primary);
+  color: var(--color-forest);
 }
 
 .device-watts {
@@ -406,7 +412,7 @@ body {
 }
 
 .device-card.on .device-watts {
-  color: var(--text-primary);
+  color: var(--color-forest);
 }
 
 /* ── Alerts Panel ─────────────────────────────────────────── */
