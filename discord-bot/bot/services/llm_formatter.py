@@ -86,39 +86,15 @@ def _build_prompt(context: str) -> str:
 
 
 def _call_llm(prompt: str) -> str:
-    provider = os.getenv("LLM_PROVIDER", "anthropic").lower()
     api_key = os.getenv("LLM_API_KEY", "")
     if not api_key:
         raise ValueError("LLM_API_KEY not set")
 
-    if provider == "anthropic":
-        import anthropic
-        client = anthropic.Anthropic(api_key=api_key)
-        msg = client.messages.create(
-            model="claude-haiku-20240307",
-            max_tokens=150,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        return msg.content[0].text.strip()
-
-    elif provider == "openai":
-        from openai import OpenAI
-        client = OpenAI(api_key=api_key)
-        resp = client.chat.completions.create(
-            model="gpt-4o-mini",
-            max_tokens=150,
-            messages=[{"role": "user", "content": prompt}],
-        )
-        return resp.choices[0].message.content.strip()
-
-    elif provider == "gemini":
-        import google.generativeai as genai
-        genai.configure(api_key=api_key)
-        model = genai.GenerativeModel("gemini-2.5-flash")
-        resp = model.generate_content(prompt)
-        return resp.text.strip()
-
-    raise ValueError(f"Unknown LLM_PROVIDER: {provider}")
+    import google.generativeai as genai
+    genai.configure(api_key=api_key)
+    model = genai.GenerativeModel("gemini-2.5-flash")
+    resp = model.generate_content(prompt)
+    return resp.text.strip()
 
 
 def _llm_format_status(rooms: list) -> str:
