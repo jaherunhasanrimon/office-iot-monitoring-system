@@ -9,7 +9,7 @@ class RoomCog(commands.Cog):
         self.bot = bot
 
     @commands.command(name="room")
-    async def room(self, ctx, *, room_name: str = None):
+    async def room(self, ctx, *, room_name: str | None = None):
         """Show status for a specific room. Usage: !room work1"""
         if not room_name:
             await ctx.send("Usage: `!room <name>` — e.g., `!room work1` or `!room drawing`")
@@ -22,6 +22,9 @@ class RoomCog(commands.Cog):
                     f"⚠️ Room **{room_name}** not found. "
                     f"Try: `drawing`, `work1`, or `work2`."
                 )
+                return
+            if not isinstance(room, dict):
+                await ctx.send(f"⚠️ Unexpected response format for room **{room_name}**.")
                 return
             reply = llm_formatter.format_room(room)
         await ctx.send(reply)

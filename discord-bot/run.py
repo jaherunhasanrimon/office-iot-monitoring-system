@@ -30,7 +30,7 @@ async def poll_alerts():
         return
 
     channel = bot.get_channel(channel_id)
-    if not channel:
+    if not isinstance(channel, discord.abc.Messageable):
         return
 
     alerts = api_client.get("/api/alerts")
@@ -49,7 +49,10 @@ async def poll_alerts():
 
 @bot.event
 async def on_ready():
-    print(f"[Bot] Logged in as {bot.user} (ID: {bot.user.id})")
+    if bot.user:
+        print(f"[Bot] Logged in as {bot.user} (ID: {bot.user.id})")
+    else:
+        print("[Bot] on_ready fired but bot.user is None — connection may be incomplete.")
     print(f"[Bot] Connected to {len(bot.guilds)} server(s)")
     if not poll_alerts.is_running():
         poll_alerts.start()
