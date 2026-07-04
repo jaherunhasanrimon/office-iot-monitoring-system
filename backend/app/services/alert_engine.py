@@ -17,6 +17,7 @@ import os
 from datetime import datetime, timedelta
 from ..db import db
 from ..models import Device, Room, Alert
+from ..realtime import emit_alert_resolved
 
 
 def _office_hours_start():
@@ -48,6 +49,7 @@ def evaluate():
     Returns a list of newly created Alert objects.
     """
     new_alerts = []
+    resolved_alerts = []
     now = datetime.utcnow()
 
     # ── Rule A: After-hours ───────────────────────────────────────────
@@ -76,6 +78,7 @@ def evaluate():
             # Condition cleared → resolve
             if existing:
                 existing.resolved_at = now
+                resolved_alerts.append(existing)
 
     # ── Rule B: Prolonged room-on (> 2 hrs continuous) ───────────────
     threshold = timedelta(hours=2)
@@ -110,6 +113,12 @@ def evaluate():
         else:
             if existing:
                 existing.resolved_at = now
+                resolved_alerts.append(existing)
 
     db.session.commit()
+
+    # Emit resolution events AFTER commit so resolved_at is persisted
+    for alert in resolved_alerts:
+        emit_alert_resolved(alert)
+
     return new_alerts

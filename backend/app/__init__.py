@@ -23,16 +23,24 @@ def create_app():
     from dotenv import load_dotenv
     load_dotenv()
 
-    mysql_user = os.getenv("MYSQL_USER", "root")
-    mysql_password = os.getenv("MYSQL_PASSWORD", "")
-    mysql_host = os.getenv("MYSQL_HOST", "localhost")
-    mysql_port = os.getenv("MYSQL_PORT", "3306")
-    mysql_db = os.getenv("MYSQL_DB", "office_iot")
+    # Use SQLite if USE_SQLITE=true is set (no MySQL required)
+    if os.getenv("USE_SQLITE", "false").lower() == "true":
+        db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "office_iot.db")
+        db_path = os.path.abspath(db_path)
+        db_uri = f"sqlite:///{db_path}"
+        print(f"[DB] Using SQLite: {db_path}")
+    else:
+        mysql_user = os.getenv("MYSQL_USER", "root")
+        mysql_password = os.getenv("MYSQL_PASSWORD", "")
+        mysql_host = os.getenv("MYSQL_HOST", "localhost")
+        mysql_port = os.getenv("MYSQL_PORT", "3306")
+        mysql_db = os.getenv("MYSQL_DB", "office_iot")
+        db_uri = (
+            f"mysql+pymysql://{mysql_user}:{mysql_password}"
+            f"@{mysql_host}:{mysql_port}/{mysql_db}"
+        )
 
-    app.config["SQLALCHEMY_DATABASE_URI"] = (
-        f"mysql+pymysql://{mysql_user}:{mysql_password}"
-        f"@{mysql_host}:{mysql_port}/{mysql_db}"
-    )
+    app.config["SQLALCHEMY_DATABASE_URI"] = db_uri
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SECRET_KEY"] = os.getenv("SECRET_KEY", "dev-secret-change-me")
 

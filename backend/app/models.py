@@ -27,7 +27,7 @@ class Device(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
-    type = db.Column(db.Enum("fan", "light"), nullable=False)
+    type = db.Column(db.String(10), nullable=False)  # "fan" or "light"
     room_id = db.Column(db.Integer, db.ForeignKey("rooms.id"), nullable=False)
     status = db.Column(db.Boolean, default=False)          # True = ON
     power_watts = db.Column(db.Integer, nullable=False)    # fan ~60W, light ~15W
