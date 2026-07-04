@@ -25,7 +25,7 @@ def get_room(room_name):
     ).first()
 
     if not room:
-        abort(404, description=f"Room '{room_name}' not found.")
+        return jsonify({"error": f"Room '{room_name}' not found."}), 404
 
     r = room.to_dict()
     r["devices"] = [d.to_dict() for d in room.devices]

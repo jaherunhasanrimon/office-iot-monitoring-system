@@ -127,16 +127,25 @@ python run.py
 
 ---
 
-## Diagrams
+## Diagrams & Interface Screenshots
 
-- [`diagrams/system-diagram.png`](diagrams/system-diagram.png) — High-level system architecture
-- [`diagrams/circuit-schematic-link.md`](diagrams/circuit-schematic-link.md) — Wokwi/Tinkercad schematic link
+### System Architecture
+![System Architecture Diagram](diagrams/system-diagram.png)
+
+### ESP32 Circuit Schematic (Drawing Room Node)
+![ESP32 Circuit Schematic](diagrams/circuit-schematic.png)
+- [Wokwi/Tinkercad Link and Description](diagrams/circuit-schematic-link.md)
+
+### Live Web Dashboard Interface
+![React Web Dashboard Mockup](diagrams/dashboard-screenshot.png)
 
 ---
 
-## Assumptions
+## Assumptions & Roadmap
 
-See [`docs/ASSUMPTIONS.md`](docs/ASSUMPTIONS.md) for decisions made on ambiguous requirements (e.g., device count).
+- See [`docs/ASSUMPTIONS.md`](docs/ASSUMPTIONS.md) for decisions made on ambiguous requirements (e.g., device count).
+- See [`Development_Process_Phases.md`](Development_Process_Phases.md) for the phase-by-phase implementation plan.
+
 
 ---
 
