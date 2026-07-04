@@ -47,8 +47,8 @@ def tick_devices(app):
         for device in chosen:
             emit_device_update(device)
 
-        # Run alert engine after state changes
-        new_alerts = evaluate(app)
+        # Run alert engine after state changes (within same app context)
+        new_alerts = evaluate()
         for alert in new_alerts:
             from .realtime import emit_alert_created
             emit_alert_created(alert)

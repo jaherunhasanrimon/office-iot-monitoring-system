@@ -41,76 +41,75 @@ def _get_unresolved(alert_type: str, room_id=None, device_id=None):
     return q.first()
 
 
-def evaluate(app):
+def evaluate():
     """
     Run both alert rules. Called after every simulator tick.
+    Must be called from within an active Flask app context.
     Returns a list of newly created Alert objects.
     """
     new_alerts = []
     now = datetime.utcnow()
 
-    with app.app_context():
-        # ── Rule A: After-hours ───────────────────────────────────────────
-        after_hours = _is_after_hours(now)
-        all_devices = Device.query.all()
+    # ── Rule A: After-hours ───────────────────────────────────────────
+    after_hours = _is_after_hours(now)
+    all_devices = Device.query.all()
 
-        for device in all_devices:
-            existing = _get_unresolved("after_hours", device_id=device.id)
+    for device in all_devices:
+        existing = _get_unresolved("after_hours", device_id=device.id)
 
-            if after_hours and device.status:
-                if not existing:
-                    alert = Alert(
-                        type="after_hours",
-                        device_id=device.id,
-                        room_id=device.room_id,
-                        message=(
-                            f"{device.name} in {device.room.name} is ON "
-                            f"outside office hours."
-                        ),
-                        created_at=now,
-                    )
-                    db.session.add(alert)
-                    db.session.flush()
-                    new_alerts.append(alert)
-            else:
-                # Condition cleared → resolve
-                if existing:
-                    existing.resolved_at = now
+        if after_hours and device.status:
+            if not existing:
+                alert = Alert(
+                    type="after_hours",
+                    device_id=device.id,
+                    room_id=device.room_id,
+                    message=(
+                        f"{device.name} in {device.room.name} is ON "
+                        f"outside office hours."
+                    ),
+                    created_at=now,
+                )
+                db.session.add(alert)
+                db.session.flush()
+                new_alerts.append(alert)
+        else:
+            # Condition cleared → resolve
+            if existing:
+                existing.resolved_at = now
 
-        # ── Rule B: Prolonged room-on (> 2 hrs continuous) ───────────────
-        threshold = timedelta(hours=2)
-        rooms = Room.query.all()
+    # ── Rule B: Prolonged room-on (> 2 hrs continuous) ───────────────
+    threshold = timedelta(hours=2)
+    rooms = Room.query.all()
 
-        for room in rooms:
-            devices = room.devices
-            if not devices:
-                continue
+    for room in rooms:
+        devices = room.devices
+        if not devices:
+            continue
 
-            all_on = all(d.status for d in devices)
-            all_long = all(
-                d.on_since is not None and (now - d.on_since) >= threshold
-                for d in devices
-            )
-            existing = _get_unresolved("prolonged_room_on", room_id=room.id)
+        all_on = all(d.status for d in devices)
+        all_long = all(
+            d.on_since is not None and (now - d.on_since) >= threshold
+            for d in devices
+        )
+        existing = _get_unresolved("prolonged_room_on", room_id=room.id)
 
-            if all_on and all_long:
-                if not existing:
-                    alert = Alert(
-                        type="prolonged_room_on",
-                        room_id=room.id,
-                        message=(
-                            f"All devices in {room.name} have been ON "
-                            f"continuously for more than 2 hours."
-                        ),
-                        created_at=now,
-                    )
-                    db.session.add(alert)
-                    db.session.flush()
-                    new_alerts.append(alert)
-            else:
-                if existing:
-                    existing.resolved_at = now
+        if all_on and all_long:
+            if not existing:
+                alert = Alert(
+                    type="prolonged_room_on",
+                    room_id=room.id,
+                    message=(
+                        f"All devices in {room.name} have been ON "
+                        f"continuously for more than 2 hours."
+                    ),
+                    created_at=now,
+                )
+                db.session.add(alert)
+                db.session.flush()
+                new_alerts.append(alert)
+        else:
+            if existing:
+                existing.resolved_at = now
 
-        db.session.commit()
-
+    db.session.commit()
     return new_alerts
