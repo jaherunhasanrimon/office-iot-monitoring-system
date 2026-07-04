@@ -100,11 +100,11 @@ export function useLiveData() {
       setAlerts((prev) => prev.filter((a) => a.id !== id));
     });
 
-    // ── 30-second fallback poll ───────────────────────────────────────────
-    // Belt-and-suspenders: re-sync full state every 30 s even if a Socket.IO
+    // ── 5-second fallback poll ────────────────────────────────────────────
+    // Belt-and-suspenders: re-sync full state every 5 s even if a Socket.IO
     // event is missed (e.g. during a reconnect gap). Keeps the dashboard
     // accurate without hammering the backend.
-    const pollId = setInterval(fetchAll, 30_000);
+    const pollId = setInterval(fetchAll, 5_000);
 
     return () => {
       socket.disconnect();
