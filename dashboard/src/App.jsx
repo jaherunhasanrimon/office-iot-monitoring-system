@@ -21,6 +21,9 @@ function Clock() {
 export default function App() {
   const { devices, usage, todayKwh, alerts, connected, loading } = useLiveData();
 
+  const activeDevices = devices.filter((d) => d.status).length;
+  const activeAlerts = alerts.filter((a) => !a.resolved_at).length;
+
   return (
     <div className="app">
       {/* ── Header ── */}
@@ -39,6 +42,42 @@ export default function App() {
           </div>
         </div>
       </header>
+
+      {/* ── Hero Banner Section (Carbonex Style) ── */}
+      <section className="hero-section">
+        <div className="hero-left">
+          <span className="hero-badge">we are</span>
+          <h1 className="hero-title">solving global energy problems.</h1>
+          <p className="hero-desc">
+            carbonex tracks environmental solutions by monitoring and optimizing workspace energy footprints. our real-time smart engine cuts office waste and guarantees sustainable resource consumption.
+          </p>
+          <button className="hero-btn" onClick={() => window.scrollTo({ top: 750, behavior: "smooth" })}>
+            view real-time data
+          </button>
+          
+          <div className="hero-stats">
+            <div className="hero-stat-card">
+              <div className="hero-stat-val">{Number(todayKwh).toFixed(3)}</div>
+              <div className="hero-stat-label">today's kwh estimated</div>
+            </div>
+            <div className="hero-stat-card">
+              <div className="hero-stat-val">{activeDevices}</div>
+              <div className="hero-stat-label">active office devices</div>
+            </div>
+            <div className="hero-stat-card">
+              <div className="hero-stat-val">{activeAlerts}</div>
+              <div className="hero-stat-label">active system alerts</div>
+            </div>
+          </div>
+        </div>
+        <div className="hero-right">
+          <img 
+            src="/hero-illustration.png" 
+            alt="Eco-friendly Smart Office" 
+            className="hero-img" 
+          />
+        </div>
+      </section>
 
       {/* ── Main grid ── */}
       <main className="main">

@@ -149,6 +149,107 @@ body {
   50%       { opacity: 0.3; }
 }
 
+/* ── Hero Section (Carbonex Mockup style) ──────────────────── */
+.hero-section {
+  display: flex;
+  gap: 4rem;
+  align-items: center;
+  padding: 3.5rem 4rem;
+  margin-bottom: 4rem;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, #fad8cd 0%, #f4f6f5 100%);
+  border: 1px solid #ebd2ca;
+}
+
+.hero-left {
+  flex: 1.2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.hero-badge {
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-forest);
+  letter-spacing: 0.1em;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  line-height: 1.1;
+  color: var(--text-primary);
+  text-transform: lowercase;
+}
+
+.hero-desc {
+  font-size: 0.95rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-width: 580px;
+}
+
+.hero-btn {
+  background: var(--color-forest);
+  color: #ffffff;
+  padding: 0.8rem 1.8rem;
+  border-radius: var(--radius-pill);
+  font-weight: 600;
+  border: none;
+  font-size: 0.875rem;
+  width: fit-content;
+  text-transform: lowercase;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.hero-btn:hover {
+  background: var(--color-slate);
+}
+
+.hero-right {
+  flex: 0.8;
+  display: flex;
+  justify-content: center;
+}
+
+.hero-img {
+  max-width: 100%;
+  height: auto;
+  max-height: 360px;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 3.5rem;
+  margin-top: 1.5rem;
+  border-top: 1px solid rgba(39, 51, 56, 0.1);
+  padding-top: 1.5rem;
+}
+
+.hero-stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.hero-stat-val {
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--color-forest);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.hero-stat-label {
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+  text-transform: lowercase;
+}
+
 /* ── Main Grid ────────────────────────────────────────────── */
 .main {
   display: grid;
