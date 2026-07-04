@@ -16,14 +16,14 @@ class RoomCog(commands.Cog):
             return
 
         async with ctx.typing():
-            room = await api_client.get(f"/api/rooms/{room_name.strip()}")
+            room = api_client.get(f"/api/rooms/{room_name.strip()}")
             if room is None:
                 await ctx.send(
                     f"⚠️ Room **{room_name}** not found. "
                     f"Try: `drawing`, `work1`, or `work2`."
                 )
                 return
-            reply = await llm_formatter.format_room(room)
+            reply = llm_formatter.format_room(room)
         await ctx.send(reply)
 
 

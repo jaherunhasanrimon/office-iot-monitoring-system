@@ -12,11 +12,11 @@ class StatusCog(commands.Cog):
     async def status(self, ctx):
         """Show the status of all devices in all rooms."""
         async with ctx.typing():
-            rooms = await api_client.get("/api/rooms")
+            rooms = api_client.get("/api/rooms")
             if rooms is None:
                 await ctx.send("⚠️ Could not reach the backend. Please try again.")
                 return
-            reply = await llm_formatter.format_status(rooms)
+            reply = llm_formatter.format_status(rooms)
         await ctx.send(reply)
 
 

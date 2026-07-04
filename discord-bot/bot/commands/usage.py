@@ -12,12 +12,12 @@ class UsageCog(commands.Cog):
     async def usage(self, ctx):
         """Show current power draw and today's estimated kWh usage."""
         async with ctx.typing():
-            current = await api_client.get("/api/usage/current")
-            today = await api_client.get("/api/usage/today")
+            current = api_client.get("/api/usage/current")
+            today = api_client.get("/api/usage/today")
             if current is None or today is None:
                 await ctx.send("⚠️ Could not reach the backend. Please try again.")
                 return
-            reply = await llm_formatter.format_usage(current, today)
+            reply = llm_formatter.format_usage(current, today)
         await ctx.send(reply)
 
 
