@@ -17,6 +17,9 @@ class UsageCog(commands.Cog):
             if current is None or today is None:
                 await ctx.send("⚠️ Could not reach the backend. Please try again.")
                 return
+            if not isinstance(current, dict) or not isinstance(today, dict):
+                await ctx.send("⚠️ Unexpected data format from the backend.")
+                return
             reply = llm_formatter.format_usage(current, today)
         await ctx.send(reply)
 
