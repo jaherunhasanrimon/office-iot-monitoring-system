@@ -16,6 +16,9 @@ class StatusCog(commands.Cog):
             if rooms is None:
                 await ctx.send("⚠️ Could not reach the backend. Please try again.")
                 return
+            if not isinstance(rooms, list):
+                await ctx.send("⚠️ Unexpected response format from the backend.")
+                return
             reply = llm_formatter.format_status(rooms)
         await ctx.send(reply)
 
