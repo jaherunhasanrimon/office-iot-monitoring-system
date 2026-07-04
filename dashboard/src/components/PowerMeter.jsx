@@ -1,10 +1,9 @@
 /**
  * PowerMeter
- * Shows total office wattage, per-room breakdown with progress bars,
- * and today's estimated kWh.
+ * Shows total office wattage and per-room inline cards with progress bars.
  */
 
-const MAX_WATTS = 750; // 15 devices × 50W avg theoretical max
+const MAX_WATTS = 250; // 5 devices × 50W theoretical room max
 
 export default function PowerMeter({ usage, todayKwh }) {
   const total   = usage?.total_watts ?? 0;
@@ -12,31 +11,35 @@ export default function PowerMeter({ usage, todayKwh }) {
 
   return (
     <section className="power-meter">
-      {/* ── Total ── */}
-      <div className="power-total">
-        <div className="power-total-label">Office Total</div>
-        <div className="power-total-value">
-          {total}
-          <span className="power-total-unit">W</span>
-        </div>
-        <div className="power-kwh">
-          Today: <span>{Number(todayKwh).toFixed(3)} kWh</span>
-        </div>
+      {/* ── Title ── */}
+      <div className="power-meter-header">
+        <span className="power-meter-icon">⚡</span>
+        <span className="power-meter-title">Power Meter</span>
       </div>
 
-      {/* ── Per-room ── */}
-      <div>
-        <div className="section-header" style={{ marginBottom: "0.75rem" }}>
-          <span className="section-icon">⚡</span>
-          <span className="section-title">Per-room consumption</span>
+      <div className="power-meter-content">
+        {/* ── Left Side: Total Watts ── */}
+        <div className="power-total">
+          <div className="power-total-value-row">
+            <span className="power-total-value">{total}</span>
+            <div className="power-total-unit-group">
+              <span className="power-total-badge">Total</span>
+              <span className="power-total-unit">W</span>
+            </div>
+          </div>
+          <div className="power-kwh">
+            Today: {Number(todayKwh).toFixed(3)} kWh
+          </div>
         </div>
+
+        {/* ── Right Side: Per-Room Breakdown Cards ── */}
         <div className="power-rooms">
           {perRoom.length > 0
             ? perRoom.map((r) => (
-                <RoomMeter key={r.room_id} room={r} total={total} />
+                <RoomMeter key={r.room_id} room={r} />
               ))
             : ["Drawing Room", "Work Room 1", "Work Room 2"].map((name) => (
-                <RoomMeter key={name} room={{ room_name: name, watts: 0 }} total={0} />
+                <RoomMeter key={name} room={{ room_name: name, watts: 0 }} />
               ))}
         </div>
       </div>
@@ -44,15 +47,14 @@ export default function PowerMeter({ usage, todayKwh }) {
   );
 }
 
-function RoomMeter({ room, total }) {
-  const pct = total > 0 ? Math.min((room.watts / MAX_WATTS) * 100, 100) : 0;
+function RoomMeter({ room }) {
+  const pct = Math.min((room.watts / MAX_WATTS) * 100, 100);
 
   return (
     <div className="power-room-card">
-      <div className="power-room-name">{room.room_name}</div>
-      <div>
-        <span className="power-room-value">{room.watts ?? 0}</span>
-        <span className="power-room-unit">W</span>
+      <div className="power-room-header">
+        <span className="power-room-name">{room.room_name}:</span>
+        <span className="power-room-value">{room.watts ?? 0}W</span>
       </div>
       <div className="power-room-bar">
         <div className="power-room-bar-fill" style={{ width: `${pct}%` }} />

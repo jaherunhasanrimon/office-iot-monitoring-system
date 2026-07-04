@@ -13,7 +13,7 @@ function Clock() {
   }, []);
   return (
     <span className="header-time">
-      {time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}
+      {time.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })}
     </span>
   );
 }
@@ -21,63 +21,25 @@ function Clock() {
 export default function App() {
   const { devices, usage, todayKwh, alerts, connected, loading } = useLiveData();
 
-  const activeDevices = devices.filter((d) => d.status).length;
-  const activeAlerts = alerts.filter((a) => !a.resolved_at).length;
-
   return (
     <div className="app">
       {/* ── Header ── */}
       <header className="header">
         <div className="header-left">
+          <span className="header-logo">🏢</span>
           <div>
-            <div className="header-title">office iot</div>
-            <div className="header-subtitle">lights · fans · discord</div>
+            <div className="header-title">Office IoT Monitor</div>
+            <div className="header-subtitle">Lights · Fans · Discord</div>
           </div>
         </div>
         <div className="header-right">
-          <Clock />
           <div className={`connection-badge ${connected ? "online" : "offline"}`}>
             <span className="dot" />
-            {connected ? "live" : "offline"}
+            {connected ? "Live" : "Offline"}
           </div>
+          <Clock />
         </div>
       </header>
-
-      {/* ── Hero Banner Section (Carbonex Style) ── */}
-      <section className="hero-section">
-        <div className="hero-left">
-          <span className="hero-badge">we are</span>
-          <h1 className="hero-title">solving global energy problems.</h1>
-          <p className="hero-desc">
-            carbonex tracks environmental solutions by monitoring and optimizing workspace energy footprints. our real-time smart engine cuts office waste and guarantees sustainable resource consumption.
-          </p>
-          <button className="hero-btn" onClick={() => window.scrollTo({ top: 750, behavior: "smooth" })}>
-            view real-time data
-          </button>
-          
-          <div className="hero-stats">
-            <div className="hero-stat-card">
-              <div className="hero-stat-val">{Number(todayKwh).toFixed(3)}</div>
-              <div className="hero-stat-label">today's kwh estimated</div>
-            </div>
-            <div className="hero-stat-card">
-              <div className="hero-stat-val">{activeDevices}</div>
-              <div className="hero-stat-label">active office devices</div>
-            </div>
-            <div className="hero-stat-card">
-              <div className="hero-stat-val">{activeAlerts}</div>
-              <div className="hero-stat-label">active system alerts</div>
-            </div>
-          </div>
-        </div>
-        <div className="hero-right">
-          <img 
-            src="/hero-illustration.png" 
-            alt="Eco-friendly Smart Office" 
-            className="hero-img" 
-          />
-        </div>
-      </section>
 
       {/* ── Main grid ── */}
       <main className="main">
@@ -98,14 +60,14 @@ export default function App() {
         {/* ── Footer ── */}
         <footer className="footer-editorial">
           <div className="footer-editorial-left">
-            <span>purity of architecture</span>
+            <span>Purity of Architecture</span>
             <span>•</span>
-            <span>power of gemini</span>
+            <span>Power of Gemini</span>
             <span>•</span>
-            <span>preservation of energy</span>
+            <span>Preservation of Energy</span>
           </div>
           <div className="footer-editorial-right">
-            <span>scroll down</span>
+            <span>Dashboard Wireframe</span>
           </div>
         </footer>
       </main>

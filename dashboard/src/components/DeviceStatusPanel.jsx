@@ -57,7 +57,7 @@ function DeviceCard({ device }) {
   const isFan = device.type === "fan";
 
   return (
-    <div className={`device-card ${isOn ? "on" : "off"}`}>
+    <div className={`device-card ${device.type} ${isOn ? "on" : "off"}`}>
       <div className="device-card-top">
         <div className="device-icon-wrap">
           {isFan
