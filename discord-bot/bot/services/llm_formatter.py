@@ -9,30 +9,43 @@ import os
 
 
 def format_status(rooms: list) -> str:
-    """Format full office status for !status command."""
+    """Format full office status for !status command.
+    Always shows structured data first, then appends a conversational LLM summary.
+    """
+    structured = _template_status(rooms)
     try:
-        return _llm_format_status(rooms)
+        conversational = _llm_format_status(rooms)
+        return f"{structured}\n\n💬 *{conversational}*"
     except Exception as e:
         print(f"[LLM] Fallback triggered: {e}")
-        return _template_status(rooms)
+        return structured
 
 
 def format_room(room: dict) -> str:
-    """Format a single room summary for !room command."""
+    """Format a single room summary for !room command.
+    Always shows structured data first, then appends a conversational LLM summary.
+    """
+    structured = _template_room(room)
     try:
-        return _llm_format_room(room)
+        conversational = _llm_format_room(room)
+        return f"{structured}\n\n💬 *{conversational}*"
     except Exception as e:
         print(f"[LLM] Fallback triggered: {e}")
-        return _template_room(room)
+        return structured
 
 
 def format_usage(current: dict, today: dict) -> str:
-    """Format usage summary for !usage command."""
+    """Format usage summary for !usage command.
+    Always shows structured data first, then appends a conversational LLM summary.
+    """
+    structured = _template_usage(current, today)
     try:
-        return _llm_format_usage(current, today)
+        conversational = _llm_format_usage(current, today)
+        return f"{structured}\n\n💬 *{conversational}*"
     except Exception as e:
         print(f"[LLM] Fallback triggered: {e}")
-        return _template_usage(current, today)
+        return structured
+
 
 
 # ── Template fallbacks (always work, zero dependencies) ──────────────────────
