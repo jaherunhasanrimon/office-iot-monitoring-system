@@ -93,7 +93,7 @@ def _call_llm(prompt: str) -> str:
 
     import google.generativeai as genai
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-2.5-flash")
+    model = genai.GenerativeModel("gemini-flash-latest")
     resp = model.generate_content(prompt)
     return resp.text.strip()
 

@@ -62,8 +62,6 @@ export default function App() {
           <div className="footer-editorial-left">
             <span>Purity of Architecture</span>
             <span>•</span>
-            <span>Power of Gemini</span>
-            <span>•</span>
             <span>Preservation of Energy</span>
           </div>
           <div className="footer-editorial-right">
