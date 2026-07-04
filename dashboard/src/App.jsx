@@ -26,17 +26,16 @@ export default function App() {
       {/* ── Header ── */}
       <header className="header">
         <div className="header-left">
-          <span className="header-logo">🏢</span>
           <div>
-            <div className="header-title">Office IoT Monitor</div>
-            <div className="header-subtitle">Lights · Fans · Discord</div>
+            <div className="header-title">office iot</div>
+            <div className="header-subtitle">lights · fans · discord</div>
           </div>
         </div>
         <div className="header-right">
           <Clock />
           <div className={`connection-badge ${connected ? "online" : "offline"}`}>
             <span className="dot" />
-            {connected ? "Live" : "Disconnected"}
+            {connected ? "live" : "offline"}
           </div>
         </div>
       </header>
@@ -56,6 +55,20 @@ export default function App() {
         <div className="sidebar">
           <AlertsPanel alerts={alerts} />
         </div>
+
+        {/* ── Footer ── */}
+        <footer className="footer-editorial">
+          <div className="footer-editorial-left">
+            <span>purity of architecture</span>
+            <span>•</span>
+            <span>power of gemini</span>
+            <span>•</span>
+            <span>preservation of energy</span>
+          </div>
+          <div className="footer-editorial-right">
+            <span>scroll down</span>
+          </div>
+        </footer>
       </main>
     </div>
   );
