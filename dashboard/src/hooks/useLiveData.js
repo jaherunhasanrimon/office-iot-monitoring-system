@@ -54,15 +54,14 @@ export function useLiveData() {
       setDevices((prev) =>
         prev.map((d) => (d.id === updated.id ? { ...d, ...updated } : d))
       );
-      // Refresh usage totals
-      fetch(`${API_URL}/api/usage/current`)
-        .then((r) => r.ok ? r.json() : null)
-        .then((data) => { if (data) setUsage(data); })
-        .catch(() => {});
-      fetch(`${API_URL}/api/usage/today`)
-        .then((r) => r.ok ? r.json() : null)
-        .then((data) => { if (data) setTodayKwh(data.estimated_kwh ?? 0); })
-        .catch(() => {});
+    });
+
+    socket.on("usage_update", (data) => {
+      setUsage({
+        total_watts: data.total_watts,
+        per_room: data.per_room
+      });
+      setTodayKwh(data.estimated_kwh ?? 0);
     });
 
     socket.on("alert_created", (newAlert) => {

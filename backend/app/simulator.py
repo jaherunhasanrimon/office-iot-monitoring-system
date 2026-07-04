@@ -53,7 +53,19 @@ def tick_devices(app):
             from .realtime import emit_alert_created
             emit_alert_created(alert)
 
+        # Calculate and emit real-time usage metrics to synchronize all clients instantly
+        from .services.usage_calculator import get_per_room_watts, get_today_kwh
+        from .realtime import emit_usage_update
         total = get_current_watts()
+        per_room = get_per_room_watts()
+        today_kwh = get_today_kwh()
+
+        emit_usage_update(
+            total_watts=total,
+            per_room=per_room,
+            today_kwh=today_kwh
+        )
+
         print(f"[Simulator] Tick — {num_to_toggle} device(s) toggled | Total: {total}W")
 
 
