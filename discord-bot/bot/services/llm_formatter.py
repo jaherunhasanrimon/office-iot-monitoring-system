@@ -71,7 +71,7 @@ def _template_usage(current: dict, today: dict) -> str:
     return (
         f"⚡ **Power Usage**\n"
         f"Right now: **{total_watts}W**\n"
-        f"Today's estimate: **{kwh:.2f} kWh**"
+        f"Today's estimate: **{kwh:.3f} kWh**"
     )
 
 
@@ -81,6 +81,7 @@ def _build_prompt(context: str) -> str:
     return (
         "You are a helpful assistant for an office IoT monitoring system. "
         "Reply in 1–3 natural, friendly sentences. No bullet points. No JSON. "
+        "Always format any estimated energy consumption (kWh) with exactly three decimal places (e.g. 0.415 kWh). "
         f"Data: {context}"
     )
 
