@@ -111,6 +111,13 @@ def _call_llm(prompt: str) -> str:
         )
         return resp.choices[0].message.content.strip()
 
+    elif provider == "gemini":
+        import google.generativeai as genai
+        genai.configure(api_key=api_key)
+        model = genai.GenerativeModel("gemini-1.5-flash")
+        resp = model.generate_content(prompt)
+        return resp.text.strip()
+
     raise ValueError(f"Unknown LLM_PROVIDER: {provider}")
 
 
