@@ -6,33 +6,41 @@ timeout, rate limit, quota), falls back silently to a template string.
 """
 
 import os
+import asyncio
 
 
-def format_status(rooms: list) -> str:
-    """Format full office status for !status command."""
-    try:
-        return _llm_format_status(rooms)
-    except Exception as e:
-        print(f"[LLM] Fallback triggered: {e}")
-        return _template_status(rooms)
+async def format_status(rooms: list) -> str:
+    """Format full office status for !status command asynchronously."""
+    def _format():
+        try:
+            return _llm_format_status(rooms)
+        except Exception as e:
+            print(f"[LLM] Fallback triggered: {e}")
+            return _template_status(rooms)
+    return await asyncio.to_thread(_format)
 
 
-def format_room(room: dict) -> str:
-    """Format a single room summary for !room command."""
-    try:
-        return _llm_format_room(room)
-    except Exception as e:
-        print(f"[LLM] Fallback triggered: {e}")
-        return _template_room(room)
+async def format_room(room: dict) -> str:
+    """Format a single room summary for !room command asynchronously."""
+    def _format():
+        try:
+            return _llm_format_room(room)
+        except Exception as e:
+            print(f"[LLM] Fallback triggered: {e}")
+            return _template_room(room)
+    return await asyncio.to_thread(_format)
 
 
-def format_usage(current: dict, today: dict) -> str:
-    """Format usage summary for !usage command."""
-    try:
-        return _llm_format_usage(current, today)
-    except Exception as e:
-        print(f"[LLM] Fallback triggered: {e}")
-        return _template_usage(current, today)
+async def format_usage(current: dict, today: dict) -> str:
+    """Format usage summary for !usage command asynchronously."""
+    def _format():
+        try:
+            return _llm_format_usage(current, today)
+        except Exception as e:
+            print(f"[LLM] Fallback triggered: {e}")
+            return _template_usage(current, today)
+    return await asyncio.to_thread(_format)
+
 
 
 # ── Template fallbacks (always work, zero dependencies) ──────────────────────
