@@ -18,11 +18,29 @@ def get_all_rooms():
 
 @rooms_bp.route("/api/rooms/<string:room_name>")
 def get_room(room_name):
-    # Case-insensitive name match (strip spaces, lowercase)
-    normalized = room_name.strip().lower().replace("-", " ")
-    room = Room.query.filter(
-        Room.name.ilike(f"%{normalized}%")
-    ).first()
+    # Normalize input: lowercase, strip, remove hyphens and spaces for flexible matching
+    normalized = room_name.strip().lower().replace("-", "").replace(" ", "")
+    all_rooms = Room.query.all()
+
+    def db_normalized(name):
+        return name.lower().replace(" ", "").replace("-", "")
+
+    def db_alias(name):
+        # Strip the word "room" from the normalized DB name so
+        # "workroom1" → "work1", "drawingroom" → "drawing"
+        return db_normalized(name).replace("room", "")
+
+    # Pass 1: exact normalized match  (e.g. "drawing room" → "drawingroom")
+    room = next((r for r in all_rooms if db_normalized(r.name) == normalized), None)
+
+    # Pass 2: alias match — strip "room" from DB name  (e.g. "work1" matches "Work Room 1")
+    if not room:
+        room = next((r for r in all_rooms if db_alias(r.name) == normalized), None)
+
+    # Pass 3: partial LIKE match on original input
+    if not room:
+        like_normalized = room_name.strip().lower().replace("-", " ")
+        room = Room.query.filter(Room.name.ilike(f"%{like_normalized}%")).first()
 
     if not room:
         return jsonify({"error": f"Room '{room_name}' not found."}), 404

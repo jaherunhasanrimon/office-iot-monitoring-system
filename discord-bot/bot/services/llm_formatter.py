@@ -16,7 +16,7 @@ def format_status(rooms: list) -> str:
     try:
         conversational = _llm_format_status(rooms)
         return f"{structured}\n\n💬 *{conversational}*"
-    except Exception as e:
+    except BaseException as e:
         print(f"[LLM] Fallback triggered: {e}")
         return structured
 
@@ -29,7 +29,7 @@ def format_room(room: dict) -> str:
     try:
         conversational = _llm_format_room(room)
         return f"{structured}\n\n💬 *{conversational}*"
-    except Exception as e:
+    except BaseException as e:
         print(f"[LLM] Fallback triggered: {e}")
         return structured
 
@@ -42,7 +42,7 @@ def format_usage(current: dict, today: dict) -> str:
     try:
         conversational = _llm_format_usage(current, today)
         return f"{structured}\n\n💬 *{conversational}*"
-    except Exception as e:
+    except BaseException as e:
         print(f"[LLM] Fallback triggered: {e}")
         return structured
 
@@ -105,10 +105,16 @@ def _call_llm(prompt: str) -> str:
         raise ValueError("LLM_API_KEY not set")
 
     import google.generativeai as genai
+    import google.api_core.exceptions as gapi_exc
     genai.configure(api_key=api_key)
-    model = genai.GenerativeModel("gemini-flash-latest")
-    resp = model.generate_content(prompt)
-    return resp.text.strip()
+    model = genai.GenerativeModel("gemini-1.5-flash")
+    try:
+        resp = model.generate_content(prompt)
+        return resp.text.strip()
+    except gapi_exc.ResourceExhausted as e:
+        raise RuntimeError(f"Gemini quota exceeded: {e}") from e
+    except gapi_exc.GoogleAPIError as e:
+        raise RuntimeError(f"Gemini API error: {e}") from e
 
 
 def _llm_format_status(rooms: list) -> str:

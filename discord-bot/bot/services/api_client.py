@@ -12,6 +12,8 @@ def get(path: str) -> dict | list | None:
     """GET a backend endpoint. Returns parsed JSON or None on failure."""
     try:
         resp = requests.get(f"{BACKEND_URL}{path}", timeout=5)
+        if resp.status_code == 404:
+            return None
         resp.raise_for_status()
         return resp.json()
     except Exception as e:

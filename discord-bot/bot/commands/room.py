@@ -20,7 +20,7 @@ class RoomCog(commands.Cog):
             if room is None:
                 await ctx.send(
                     f"⚠️ Room **{room_name}** not found. "
-                    f"Try: `drawing`, `work1`, or `work2`."
+                    f"Try: `drawing`, `work1`, `work2`, or `drawing room`."
                 )
                 return
             if not isinstance(room, dict):
